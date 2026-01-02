@@ -47,16 +47,17 @@ state("GeometryDash", "2.206"){
 }
 
 state("GeometryDash", "2.207"){
-	bool loadingMusic : "GeometryDash.exe", 0x6A4E18, 0x230, 0x90, 0x118, 0x18;
+	bool loadingMusic : "GeometryDash.exe", 0x6A4E18, 0x198, 0x70, 0x0, 0x5C;
 	float position : "GeometryDash.exe", 0x6A4E68, 0x208, 0xD98, 0x4C;
 	int scene : "GeometryDash.exe", 0x6A4E68, 0x2BC;
-	double timer : "GeometryDash.exe", 0x6A4E68, 0x208, 0x3488;
+	double timer : "GeometryDash.exe", 0x6A4E68, 0x208, 0x3C8;
 	bool levelComplete : "GeometryDash.exe", 0x6A4E68, 0x208, 0x3490;
+	float timewarp : "GeometryDash.exe", 0x6A4E68, 0x100, 0x38;
 }
 
 startup {
 	vars.loadingLevel = false;
-    vars.debug = false;
+    vars.debug = true;
 	vars.totalTime = 0d;
 	refreshRate = 60;
     vars.stopwatch = new Stopwatch();
@@ -155,8 +156,11 @@ split {
         if (!old.levelComplete && current.levelComplete) {
             vars.stopwatch.Start();
         }
+
+		// approximate quadratic curve, covers 1.00-2.00x timewarp cases
+		vars.msToWait = (0.457143 * current.timewarp * current.timewarp - 1.85143 * current.timewarp + 2.37762) * 1000;
         
-        if (vars.stopwatch.Elapsed.TotalMilliseconds >= 983) {
+        if (vars.stopwatch.Elapsed.TotalMilliseconds >= vars.msToWait) {
             vars.stopwatch.Reset();
             return true;
         }
@@ -184,6 +188,7 @@ update {
         "\n[GD ASL] Loading Level ? " + vars.loadingLevel.ToString() +
         "\n[GD ASL] Current Timer: " + current.timer.ToString() +
         "\n[GD ASL] Total Time: " + vars.totalTime.ToString() +
-        "\n[GD ASL] Classic Mode: " + settings["classic"].ToString());
+        "\n[GD ASL] Classic Mode: " + settings["classic"].ToString() +
+		"\n[GD ASL] Timewarp: " + current.timewarp.ToString());
     }
 }
