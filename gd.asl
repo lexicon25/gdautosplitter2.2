@@ -58,9 +58,9 @@ state("GeometryDash", "2.207"){
 }
 
 state("GeometryDash", "2.208"){
-	bool loadingMusic : "GeometryDash.exe", 0x6C1E88, 0x198, 0x70, 0x0, 0x5C;
+	bool loadingMusic : "GeometryDash.exe", 0x6C1E88, 0x230, 0x90, 0x118, 0x18;
 	float position : "GeometryDash.exe", 0x6C1ED8, 0x208, 0xDA0, 0x4C;
-	int scene : "GeometryDash.exe", 0x6A4E68, 0x2BC;
+	int scene : "GeometryDash.exe", 0x6C1ED8, 0x2BC;
 	double timer : "GeometryDash.exe", 0x6C1ED8, 0x208, 0x3D0;
 	bool levelComplete : "GeometryDash.exe", 0x6C1ED8, 0x3570;
 	float timewarp : "GeometryDash.exe", 0x6C1ED8, 0x100, 0x38;
@@ -119,20 +119,24 @@ onStart {
 
 isLoading { 
 	if (settings["classic"] || version == "2.11") {
-        if (!old.loadingMusic && current.loadingMusic) {
-            vars.loadingLevel = !vars.loadingLevel;
+        if (current.loadingMusic) {
+			print("[GD ASL] in here");
+            vars.loadingLevel = true;
 		}
         
 		if (current.scene == 0) {
+			print("[GD ASL] scene");
 			vars.loadingLevel = false;
 		}
 
 		if (version == "2.11") {
 			if (old.position == 0 && current.position != 0) {
+				print("[GD ASL] position");
 				vars.loadingLevel = false;
 			}
 		} else {
 			if (old.timer == 0 && current.timer != 0) {
+				print("[GD ASL] timer");
 				vars.loadingLevel = false;
 			}
 		}
