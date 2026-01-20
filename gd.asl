@@ -68,7 +68,7 @@ state("GeometryDash", "2.208"){
 
 startup {
 	vars.loadingLevel = false;
-    vars.debug = true;
+    vars.debug = false;
 	vars.totalTime = 0d;
 	refreshRate = 60;
     vars.stopwatch = new Stopwatch();
