@@ -1,3 +1,5 @@
+// scene is 0 on main menu, 1 in gauntlets, 8 in main level menu, etc.
+
 state("GeometryDash", "2.11"){
   bool loadingMusic : "GeometryDash.exe", 0x3222A8, 0x128, 0x34, 0xC0, 0xC;
   string3 percentage : "GeometryDash.exe", 0x3222D0, 0x164, 0x124, 0xEC, 0x2A4, 0xE8, 0x8, 0x12C;
@@ -55,6 +57,15 @@ state("GeometryDash", "2.207"){
 	float timewarp : "GeometryDash.exe", 0x6A4E68, 0x100, 0x38;
 }
 
+state("GeometryDash", "2.208"){
+	bool loadingMusic : "GeometryDash.exe", 0x6C1E88, 0x198, 0x70, 0x0, 0x5C;
+	float position : "GeometryDash.exe", 0x6C1ED8, 0x208, 0xDA0, 0x4C;
+	int scene : "GeometryDash.exe", 0x6A4E68, 0x2BC;
+	double timer : "GeometryDash.exe", 0x6C1ED8, 0x208, 0x3D0;
+	bool levelComplete : "GeometryDash.exe", 0x6C1ED8, 0x3570;
+	float timewarp : "GeometryDash.exe", 0x6C1ED8, 0x100, 0x38;
+}
+
 startup {
 	vars.loadingLevel = false;
     vars.debug = true;
@@ -94,6 +105,8 @@ init
 		version = "2.206";
 	} else if (moduleSize == 10600448) {
 		version = "2.207";
+	} else if (moduleSize == 10719232) {
+		version = "2.208";
     } else {
 		version = "Unsupported: " + moduleSize.ToString();
 		MessageBox.Show("This game version is currently not supported.", "LiveSplit Auto Splitter - Unsupported Game Version");
